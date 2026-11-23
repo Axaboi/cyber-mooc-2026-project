@@ -16,17 +16,16 @@ logger = logging.getLogger(__name__)
 @login_required
 def index(request):
     user_id = request.user.id
+    user = request.user
     search = request.GET.get('search', '').strip()
-    with connection.cursor() as cursor: # fix remove lines 20-24
+    with connection.cursor() as cursor: # remove lines 21-23, remove comment / activate on line 24 for injection fix
                 cursor.execute(f"SELECT id, question_text FROM polls_app_input WHERE owner_id='{user_id}' AND question_text LIKE '%{search}%'")
                 query = cursor.fetchall()
-    inputs = Input.objects.all()
-    return render(request, "polls_app/index.html", {"inputs" : inputs.values(), 'queries' : query})
-    # Fix is the four lines down, remove comments to activate
-    #user = request.user
     #query = Input.objects.filter(owner=user, question_text=search)
+    inputs = Input.objects.all() # remove line 25, remove comment / activate line 26 for fix
     #inputs = Input.objects.filter(owner=user)
-    #return render(request, "polls_app/index.html", {'inputs' : inputs.values(), 'queries' : query.values()})
+    return render(request, "polls_app/index.html", {"inputs" : inputs.values(), 'queries' : query}) # remove this, activate line under with lines 21-23 removed and line 24 activated to work
+    #return render(request, "polls_app/index.html", {'inputs' : inputs.values(), 'queries' : query.values()}) # activate this when fixing injection flaw
 
 @login_required
 def add_input(request):
@@ -55,10 +54,10 @@ def add_user(request):
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '').strip()
         if username == password:
-            #logger.warning("Password and username too similar!") -> remove comment to activate
+            #logger.warning("Password and username too similar!") #-> remove comment to activate
             return redirect("/")
         try:
-            #validate_password(password=password) -> remove comment to activate
+            #validate_password(password=password) #-> remove comment to activate
             User.objects.create_user(username=username, password=password)
             return redirect("/")
             
