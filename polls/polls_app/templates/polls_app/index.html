@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Inputs</title>
+    </head>
+
+
+    <body>
+        <a href="{% url 'login' %}">Log in</a>
+        <a href="add_user">Register</a>
+
+        <ul>
+            {% for input in inputs %}
+                <li>{{ input }}</li>
+            {% endfor %}
+        </ul>
+
+
+        
+        <ul>
+            {% for query in queries %}
+                <li>{{ query }}</li>
+            {% endfor %}
+        </ul>
+
+        <form name="search" method="GET">
+            <input type="text" name="search">
+            <input type="submit" value="Search input">
+        </form>
+
+
+		<form action='add/' method="POST">
+            {% csrf_token %}
+            <label for="input">Add input question</label>
+			<input type="text" name="input"/>
+            <label for="secret_answer">Add secret answer</label>
+            <input type="text", name="secret_answer">
+            <input type="submit" value="Add input"/>
+        </form>
+
+        
+        <form action="delete/" method="POST">
+            {% csrf_token %}
+
+            <input type="text" name="delete"/><br/>
+            <input type="submit" value="Delete all"/>
+
+        </form>
+        
+        
+        
+        
+        <form action="logout/" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Logout">
+        </form>
+
+    
+
+    </body>
+
+
+    </body>
+</html>

@@ -17,7 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from django.contrib.auth.views import LogoutView, LoginView
+
 urlpatterns = [
-    path("polls/", include("polls_app.urls")),
+    path("", include("polls_app.urls")),
     path('admin/', admin.site.urls),
+    path("logout/", LogoutView.as_view(next_page="/")),
+    path("login/", LoginView.as_view(template_name="polls_app/login.html"), name="login"),
 ]
